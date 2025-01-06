@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import './App.css';
-import Landing from "./Landing/Landing";
 import Footer from './Landing/Footer';
 import Nav from './Landing/nav';
+import Community from './Terms/community';
 
-function App() {
+function Communityapp() {
   return (
    <div>
     <Nav />
-    <Landing />
+    <Community />
     <Footer />
    </div>
   )
 }
 
-export default App
+export default Communityapp

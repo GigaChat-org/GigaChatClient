@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import './App.css';
-import Landing from "./Landing/Landing";
 import Footer from './Landing/Footer';
 import Nav from './Landing/nav';
+import Privacy from './Terms/privacy';
 
-function App() {
+function Privacyapp() {
   return (
    <div>
     <Nav />
-    <Landing />
+    <Privacy />
     <Footer />
    </div>
   )
 }
 
-export default App
+export default Privacyapp

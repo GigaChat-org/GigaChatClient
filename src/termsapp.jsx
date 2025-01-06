@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import './App.css';
-import Landing from "./Landing/Landing";
 import Footer from './Landing/Footer';
 import Nav from './Landing/nav';
+import TermsAndConditions from './Terms/Termspolicies';
 
-function App() {
+function Termsapp() {
   return (
    <div>
     <Nav />
-    <Landing />
+    <TermsAndConditions />
     <Footer />
    </div>
   )
 }
 
-export default App
+export default Termsapp

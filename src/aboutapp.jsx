@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import './App.css';
-import Landing from "./Landing/Landing";
 import Footer from './Landing/Footer';
 import Nav from './Landing/nav';
+import AboutUs from './About/About';
 
-function App() {
+function Aboutapp() {
   return (
    <div>
     <Nav />
-    <Landing />
+    <AboutUs />
     <Footer />
    </div>
   )
 }
 
-export default App
+export default Aboutapp

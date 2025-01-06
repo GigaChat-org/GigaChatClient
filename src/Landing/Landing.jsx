@@ -1,140 +1,93 @@
 import React, { useState, useEffect } from 'react';
-import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';  // Import Heroicons
+import { useNavigate } from "react-router-dom";
+import Dashimg from "../assets/Dashimg.png"
 
 const Landing = () => {
-  const [theme, setTheme] = useState('dark');  // Default theme is dark
-  const [isOpen, setIsOpen] = useState(false);  // Burger menu state
+  
+  const navigate = useNavigate();
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
+  function handleClick() {
+    navigate("/chat");
+  }
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setTheme(savedTheme);  // Set saved theme on load
-    }
-  }, []);
+  const testimonials = [
+    {
+      quote: "I never knew anonymous chatting could be this fun! The design is smooth and intuitive, and I’ve had some of the best conversations with people I’d never have met otherwise. It feels very safe and completely anonymous, which makes it even better. It’s a great way to make new connections without any pressure. Highly recommend!",
+      name: "Giga #1",
+     
+    },
+    {
+      quote: "As a lesbian, I’ve often felt hesitant to open up about my feelings, but this platform has given me a space where I can be myself without fear of judgment. I’ve had conversations with people who understand, and it’s been so relieving to share my thoughts anonymously. It’s refreshing to have such an open and safe space to express myself. I truly feel heard here.",
+     name: "Giga #2",
+    },
+    {
+      quote: "I was feeling really down after failing my exam, and I didn't know who to talk to. This app was a lifeline. I could vent and talk to strangers who listened without judgment. It really helped me clear my head and feel better. I’m grateful for this anonymous space where I could share my feelings and not feel alone.",
+      name: "Giga #3",
+      
+    },
+    // Add more testimonials as needed
+  ];
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+    <div className="min-h-screen bg-gray-900 text-white">
       {/* Navbar */}
-      <header className="w-full py-4 px-6 border-b-2">
-        <nav className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Giga Chat</h1>
-
-          {/* Navbar Links (Visible on all screens) */}
-          <ul className="hidden lg:flex space-x-8">
-            <li><a href="#home" className="text-lg hover:text-cyan-400 transition-all">Home</a></li>
-            <li><a href="#blog" className="text-lg hover:text-cyan-400 transition-all">Blog</a></li>
-            <li><a href="#about" className="text-lg hover:text-cyan-400 transition-all">About</a></li>
-            <li><a href="#support" className="text-lg hover:text-cyan-400 transition-all">Support</a></li>
-          </ul>
-
-
-          {/* Other Navbar Buttons */}
-          <div className="hidden lg:flex space-x-4">
-          
-          {/* Theme Toggle Button (Visible on all screens) */}
-          <button
-  className="px-4 py-2 text-sm font-semibold rounded-md focus:outline-none hidden lg:block"
-  onClick={toggleTheme}
->
-  {theme === 'light' ? (
-    <SunIcon className="h-6 w-6 text-yellow-500" />
-  ) : (
-    <MoonIcon className="h-6 w-6 text-gray-400" />
-  )}
-</button>
-
-            <a
-              href="#login"
-              className="px-2 py-2 text-lg font-semibold border-2 border-white rounded-md hover:bg-white hover:text-gray-900 transition-all"
-            >
-              Login
-            </a>
-            <a
-              href="#start-chat"
-              className="px-6 py-2 text-lg font-semibold bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-all"
-            >
-              Start Chat
-            </a>
-          </div>
-
-          {/* Burger Button for Small Screens */}
-          <div className="flex items-center space-x-4 lg:hidden">
-            {/* Theme Toggle Button placed just left of Burger Button */}
-            <button
-              className="px-4 py-2 text-sm font-semibold rounded-md focus:outline-none"
-              onClick={toggleTheme}
-            >
-              {theme === 'light' ? (
-                <SunIcon className="h-6 w-6 text-yellow-500" />
-              ) : (
-                <MoonIcon className="h-6 w-6 text-gray-400" />
-              )}
-            </button>
-
-            {/* Burger Button */}
-            <button
-              className="text-2xl focus:outline-none"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? 'X' : '☰'}
-            </button>
-          </div>
-        </nav>
-      </header>
-
-      {/* Burger Menu Dropdown (Below 1000px) */}
-      <div
-        className={`lg:hidden ${isOpen ? 'block' : 'hidden'} bg-gray-800 text-white p-6 space-y-6 text-center`}
-      >
-        <ul className="space-y-4">
-          <li><a href="#home" className="text-lg hover:text-cyan-400 transition-all">Home</a></li>
-          <li><a href="#blog" className="text-lg hover:text-cyan-400 transition-all">Blog</a></li>
-          <li><a href="#about" className="text-lg hover:text-cyan-400 transition-all">About</a></li>
-          <li><a href="#support" className="text-lg hover:text-cyan-400 transition-all">Support</a></li>
-          <li>
-            <a
-              href="#login"
-              className="px-4 py-2 text-lg font-semibold border-2 border-white rounded-md hover:bg-white hover:text-gray-900 transition-all"
-            >
-              Login
-            </a>
-          </li>
-          <li>
-            <a
-              href="#start-chat"
-              className="px-4 py-2 text-lg font-semibold bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-all"
-            >
-              Start Chat
-            </a>
-          </li>
-        </ul>
-      </div>
+      
 
       {/* Main Content */}
-      <main className="flex flex-col justify-center items-center p-8 space-y-6">
-        <section className="text-center space-y-4 max-w-xl">
-          <h2 className="text-2xl font-semibold">Welcome to Giga Chat</h2>
-          <p>Get ready for an anonymous chat experience!</p>
-          <p>Click on the "Start Chatting" button to join a random chat room. No sign-up required, just start chatting anonymously!</p>
-          <p>Your privacy is our priority. Chat with strangers freely and securely.</p>
-        </section>
+      <main className="flex flex-col justify-center items-center space-y-6">
+      
+      <section className=" flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row space-y-4 h-5/6 mx-auto bg-gray-800 bg-opacity-75 p-10 rounded-lg shadow-lg bg-[url('D:./assets/background.png')] bg-cover">
+      <div className='flex flex-col text-center md:text-left lg:text-left xl:text-left 2xl:text-left justify-center'>
+      <div>
+  <h1 className="text-5xl font-semibold text-white">Chat Anonymously,</h1>
+  <h1 className="text-5xl font-semibold text-white">Talk Freely</h1>
+  </div>
+  <div className='my-9 flex justify-center md:justify-start lg:justify-start xl:justify-start 2xl:justify-start'>
+  <p className="text-white text-xl lg:w-1/2 xl:w-1/2 2xl:w-1/2 md:w-9/12">Get ready for an anonymous chat experience! Click on the "Start Chatting" button to join a random chat room. No sign-up required, just start chatting anonymously! Your privacy is our priority. Chat with strangers freely and securely.</p>
+  </div>
+  <div>
+  <button onClick={handleClick} className="px-6 py-3 text-xl text-white bg-cyan-500 rounded-lg hover:bg-cyan-600 focus:outline-none">
+    Start Chatting
+  </button>
+  </div>
+</div>
+<div className=' flex justify-center'>
+<img className='size-full' src={Dashimg} alt="Dashimg"/>
+</div>
+</section>
 
-        {/* Start Chat Button */}
-        <button className="px-6 py-3 text-xl text-white bg-cyan-500 rounded-lg hover:bg-cyan-600 focus:outline-none">
-          Start Chatting
-        </button>
+        {/* Review */}
+        <div className="max-w-full flex flex-col justify-center items-center p-8 space-y-6 bg-black text-white">
+          <div className='max-w-screen-xl w-full text-center'>
+            <h1 className='text-3xl font-semibold'>Safe and fun—here's what users think</h1>
+          </div> 
+          <div className="sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 2xl:w-1/2 p-4">
+            <p className="text-xl font-semibold leading-relaxed text-center">
+              See why people are choosing our platform over other chat services. Here’s what they love about our safe, fun, and anonymous chat experience.
+            </p>
+          </div>
+
+          <div className="py-12 bg-gray-900 text-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-3xl font-extrabold text-center mb-8">What Our Users Say's !!!</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {testimonials.map((testimonial, index) => (
+                  <div
+                    key={index}
+                    className="p-6 rounded-lg shadow-lg transform transition-transform duration-500 bg-gray-800 text-white rotate-2 hover:rotate-0"
+                  >
+                    <p className="text-lg italic mb-4 text-gray-300">"{testimonial.quote}"</p>
+                    <p className="font-bold">{testimonial.name}</p>
+                    <p className="text-sm text-gray-400">{testimonial.role}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </main>
-
-      {/* Footer */}
-      <footer className="text-center py-4 border-t-2">
-        <p>© 2025 Giga Chat | All Rights Reserved</p>
-      </footer>
     </div>
   );
 };
