@@ -15,7 +15,7 @@ const Nav = () => {
     {/* Navbar */}
     <header className="w-full py-4 px-6 border-b-2">
         <nav className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Giga Chat</h1>
+          <h1 className="text-3xl font-bold">GigaChat</h1>
 
           {/* Navbar Links (Visible on all screens) */}
           <ul className="hidden lg:flex space-x-8">

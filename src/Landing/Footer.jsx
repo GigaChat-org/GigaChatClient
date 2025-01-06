@@ -27,7 +27,7 @@ const Footer = () => {
 </footer>
 
 <div className="w-full border-t-2 mt-0">
-  <p className="text-center py-4">© {new Date().getFullYear()} Giga Chat | All Rights Reserved</p>
+  <p className="text-center py-4">© {new Date().getFullYear()} GigaChat | All Rights Reserved</p>
 </div>
 
     </div>
