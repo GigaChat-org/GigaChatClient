@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
+import { jsPDF } from 'jspdf';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const socket = io('http://localhost:3000');
 
@@ -62,8 +65,23 @@ function ChatApp() {
     }
   };
 
+  const downloadChatAsPDF = () => {
+    if (messages.length === 0) {
+      toast.info('No chat available to download.');
+      return;
+    }
+
+    const doc = new jsPDF();
+    messages.forEach((msg, i) => {
+      doc.text(msg, 10, 10 + i * 10); // Each message on a new line
+    });
+    doc.save('chat.pdf');
+    toast.success('Chat downloaded as PDF.');
+  };
+
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <ToastContainer />
       <h1>Random Anonymous Chat</h1>
       <p>{status}</p>
       <div
@@ -127,6 +145,21 @@ function ChatApp() {
           </>
         )}
       </div>
+      <button
+        onClick={downloadChatAsPDF}
+        style={{
+          marginTop: '10px',
+          padding: '10px 20px',
+          fontSize: '16px',
+          backgroundColor: '#4caf50',
+          color: 'white',
+          border: 'none',
+          cursor: 'pointer',
+          borderRadius: '5px',
+        }}
+      >
+        Download Chat as PDF
+      </button>
     </div>
   );
 }
