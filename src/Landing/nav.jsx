@@ -20,7 +20,7 @@ const Nav = () => {
           {/* Navbar Links (Visible on all screens) */}
           <ul className="hidden lg:flex space-x-8">
             <li><a href="/" className="text-lg hover:text-cyan-400 transition-all">Home</a></li>
-            <li><a href="#blog" className="text-lg hover:text-cyan-400 transition-all">Blog</a></li>
+            <li><a href="/blogs" className="text-lg hover:text-cyan-400 transition-all">Blog</a></li>
             <li><a href="/about-us" className="text-lg hover:text-cyan-400 transition-all">About</a></li>
             <li><a href="/support" className="text-lg hover:text-cyan-400 transition-all">Support</a></li>
           </ul>
