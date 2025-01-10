@@ -5,7 +5,7 @@ const Footer = () => {
     <div className='bg-gray-900 text-white'>
     <footer className="flex flex-col lg:flex-row justify-between items-center py-10 border-t-2 px-16">
   <div className="flex items-center space-x-4">
-    <h1 className="text-xl font-bold">Giga Chat</h1>
+    <h1 className="text-xl font-bold">GigaChat</h1>
   </div>
   <div className="flex flex-col md:flex-row items-center py-5 space-x-4 space-y-4 md:space-y-0">
     <ul className="flex flex-col md:flex-row space-x-4 space-y-4 md:space-y-0">

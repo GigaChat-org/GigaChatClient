@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { jsPDF } from 'jspdf';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import EmojiPicker from 'emoji-picker-react';
 
 const socket = io('http://localhost:3000');
 
-function ChatApp() {
+function Chatting() {
   const [status, setStatus] = useState('');
   const [match, setMatch] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const chatBoxRef = useRef(null);
 
   useEffect(() => {
     socket.on('matched', (data) => {
@@ -39,6 +42,13 @@ function ChatApp() {
     };
   }, []);
 
+  useEffect(() => {
+    chatBoxRef.current?.scrollTo({
+      top: chatBoxRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   const startChat = () => {
     setMessages([]);
     setStatus('Searching for a match...');
@@ -52,8 +62,8 @@ function ChatApp() {
   };
 
   const disconnectChat = () => {
-    socket.emit('disconnect-chat'); // Notify the server
-    setMatch(null); // Reset the match state to null
+    socket.emit('disconnect-chat');
+    setMatch(null);
     setStatus('You are disconnected. Press "Start Chat" to reconnect.');
   };
 
@@ -65,6 +75,13 @@ function ChatApp() {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
   const downloadChatAsPDF = () => {
     if (messages.length === 0) {
       toast.info('No chat available to download.');
@@ -73,58 +90,76 @@ function ChatApp() {
 
     const doc = new jsPDF();
     messages.forEach((msg, i) => {
-      doc.text(msg, 10, 10 + i * 10); // Each message on a new line
+      doc.text(msg, 10, 10 + i * 10);
     });
     doc.save('chat.pdf');
     toast.success('Chat downloaded as PDF.');
   };
 
+  const onEmojiClick = (emojiData) => {
+    setMessage((prev) => prev + emojiData.emoji);
+    setShowEmojiPicker(false);
+  };
+
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <div className="min-h-screen bg-gradient-to-b from-gray-800 to-gray-900 text-white flex flex-col items-center p-6">
       <ToastContainer />
-      <h1>Random Anonymous Chat</h1>
-      <p>{status}</p>
+      <h1 className="text-4xl font-extrabold mb-6 text-yellow-400">Random Anonymous Chat</h1>
+      <p className="text-lg mb-4">{status}</p>
       <div
-        style={{
-          border: '1px solid #ccc',
-          padding: '10px',
-          height: '300px',
-          overflowY: 'auto',
-          marginBottom: '10px',
-          backgroundColor: '#f9f9f9',
-        }}
+        ref={chatBoxRef}
+        className="w-full max-w-2xl h-96 bg-gray-700 rounded-xl p-4 overflow-y-auto shadow-2xl"
       >
         {messages.map((msg, index) => (
-          <p key={index} style={{ margin: '5px 0', padding: '5px' }}>
+          <div
+            key={index}
+            className={`mb-3 p-3 rounded-lg shadow-md transition-transform transform ${
+              msg.startsWith('You:') ? 'bg-blue-600 self-end text-right' : 'bg-gray-600'
+            }`}
+          >
             {msg}
-          </p>
+          </div>
         ))}
       </div>
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        style={{ width: '80%', padding: '10px', fontSize: '16px' }}
-        placeholder="Type your message..."
-        disabled={!match}
-      />
-      <button
-        onClick={sendMessage}
-        style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          marginLeft: '10px',
-          cursor: 'pointer',
-        }}
-        disabled={!match || message.trim() === ''}
-      >
-        Send
-      </button>
-      <div className="mt-4 flex gap-4">
+      <div className="flex flex-col w-full max-w-2xl mt-4">
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyPress}
+          className="w-full p-4 rounded-lg bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-none shadow-md"
+          placeholder="Type your message... (Shift + Enter for new line)"
+          rows={2}
+          disabled={!match}
+        ></textarea>
+        <div className="flex justify-between items-center mt-2">
+          <button
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            className={`px-4 py-2 rounded-lg text-xl transition shadow-md ${
+              match ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-gray-500 cursor-not-allowed'
+            }`}
+            disabled={!match}
+          >
+            😊
+          </button>
+          <button
+            onClick={sendMessage}
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 shadow-lg"
+            disabled={!match || message.trim() === ''}
+          >
+            Send
+          </button>
+        </div>
+        {showEmojiPicker && (
+          <div className="mt-2">
+            <EmojiPicker onEmojiClick={onEmojiClick} />
+          </div>
+        )}
+      </div>
+      <div className="mt-6 flex gap-4">
         {!match ? (
           <button
             onClick={startChat}
-            className="px-6 py-3 text-lg font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 transition"
+            className="px-6 py-3 text-lg font-medium bg-green-500 rounded-md hover:bg-green-600 shadow-lg"
           >
             Start Chat
           </button>
@@ -132,13 +167,13 @@ function ChatApp() {
           <>
             <button
               onClick={nextMatch}
-              className="px-6 py-3 text-lg font-medium text-white bg-green-500 rounded-md hover:bg-green-600 transition"
+              className="px-6 py-3 text-lg font-medium bg-yellow-500 rounded-md hover:bg-yellow-600 shadow-lg"
             >
               Next Match
             </button>
             <button
               onClick={disconnectChat}
-              className="px-6 py-3 text-lg font-medium text-white bg-red-500 rounded-md hover:bg-red-600 transition"
+              className="px-6 py-3 text-lg font-medium bg-red-500 rounded-md hover:bg-red-600 shadow-lg"
             >
               Disconnect
             </button>
@@ -147,16 +182,7 @@ function ChatApp() {
       </div>
       <button
         onClick={downloadChatAsPDF}
-        style={{
-          marginTop: '10px',
-          padding: '10px 20px',
-          fontSize: '16px',
-          backgroundColor: '#4caf50',
-          color: 'white',
-          border: 'none',
-          cursor: 'pointer',
-          borderRadius: '5px',
-        }}
+        className="mt-4 px-6 py-3 text-lg font-medium bg-purple-500 rounded-md hover:bg-purple-600 shadow-lg"
       >
         Download Chat as PDF
       </button>
@@ -164,4 +190,4 @@ function ChatApp() {
   );
 }
 
-export default ChatApp;
+export default Chatting;
