@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import Nav from './Landing/nav';
 import Footer from './Landing/Footer';
-import Blog from './Blogs/Blog';
+import { Outlet } from 'react-router-dom';
 
 function Blogapp() {
   return (
    <div>
-   <Nav />
-    <Blog />
+    <Nav />
+    <Outlet />
     <Footer />
    </div>
   )
